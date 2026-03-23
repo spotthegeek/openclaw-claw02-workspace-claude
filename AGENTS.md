@@ -228,3 +228,27 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
+
+## 📋 Task Management Protocol
+
+When Mark gives you a task:
+
+1. **Create a task** via the Task API immediately with:
+   - `status: "inbox"` initially
+   - `assignee: "<agent-name>"` (use the agent's own name)
+   - `priority` based on urgency (A/B/C)
+   - `project` based on context
+
+2. **When actively working on it:**
+   - Update status to `"active"`
+   - Include the task ID in your work context
+
+3. **When the task is complete (ready for review):**
+   - Update status to `"review"`
+   - Add a `description` summary of actions completed
+
+4. **Mark confirms completion:**
+   - Status moves to `"done"`
+
+**API Base:** `http://localhost:18793`
+**Task endpoints:** POST `/api/tasks`, PATCH `/api/tasks/:id`
