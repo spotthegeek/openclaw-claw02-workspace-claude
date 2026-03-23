@@ -113,6 +113,24 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 
 **Don't overdo it:** One reaction per message max. Pick the one that fits best.
 
+## 🗨️ Cross-Channel Visibility (Telegram, Webchat, etc.)
+
+When working on tasks that involve significant tool calls (web searches, exec commands, file writes, building things), keep the user informed on other channels:
+
+**Before starting a long or multi-step task on Telegram:** Send a short inline status message first. Something like:
+- "🔍 Looking into this — back in a few minutes"
+- "🔧 Working on the task API — will update you when done"
+- "📝 Writing up the plan now — give me a moment"
+
+**During long-running sub-agent work:** Send periodic updates at natural checkpoints:
+- "✅ Found the issue — working on a fix"
+- "📋 Halfway through the migration script"
+- "🎯 Done, here's the summary..."
+
+**Rule of thumb:** If a task will take more than ~30 seconds or involves multiple tool calls, send a heads-up on Telegram first. It's better to over-communicate briefly than leave the user wondering if you're stuck.
+
+**How to send:** Use the `sessions_send` tool to message the Telegram session directly. Keep messages short and conversational.
+
 ## Tools
 
 Skills provide your tools. When you need one, check its `SKILL.md`. Keep local notes (camera names, SSH details, voice preferences) in `TOOLS.md`.
