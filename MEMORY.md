@@ -7,19 +7,25 @@
 ## Mission Control (MC) — Primary Responsibility
 I manage the **Mission Control** codebase — a self-hosted dashboard for orchestrating multiple OpenClaw AI agent deployments.
 
-**Location:** `/opt/openclaw/.openclaw/mc-codebase`
+**Codebase Location:** `/opt/openclaw/.openclaw/mc-codebase` (BOTH the working directory for edits AND where docker-compose.yml lives)
 
 **Architecture:**
-- Two Docker containers: Next.js 15 frontend (port 3000) + FastAPI backend (port 8000)
+- Three Docker containers: Next.js 15 frontend (`mc-codebase-frontend-1`, port 3000) + FastAPI backend (`mc-codebase-backend-1`, port 8000) + task API (`mc-codebase-task-api-1`)
 - Frontend proxies API calls through `/api/proxy/[...path]` to backend
 - Backend maintains WebSocket connections to OpenClaw instances and fans out SSE to browser
 - OpenClaw v2 is WebSocket-first; REST API is minimal (mostly `/health`)
 
 **Key Commands:**
-- Rebuild/restart MC: `cd /opt/openclaw/.openclaw/mc-codebase && docker compose build && docker compose up -d`
-- Restart backend only: `cd /opt/openclaw/.openclaw/mc-codebase && docker compose restart backend`
+- Restart backend only: `docker restart mc-codebase-backend-1`
+- Restart frontend only: `docker restart mc-codebase-frontend-1`
+- Rebuild and restart all: `cd /opt/openclaw/.openclaw/mc-codebase && docker compose build && docker compose up -d`
 - Check container health: `docker ps | grep mc-codebase`
 - View backend logs: `docker logs mc-codebase-backend-1`
+- View frontend logs: `docker logs mc-codebase-frontend-1`
+
+**IMPORTANT — When to restart backend:** Python changes require a **rebuild**: `cd /opt/openclaw/.openclaw/mc-codebase && docker compose build backend && docker compose up -d backend`. Frontend changes (Next.js) are hot-reloaded and do not require a restart.
+
+**WARNING:** `/opt/openclaw/mission-control` is an OLD stale copy of the codebase — do NOT edit it. All edits go to `/opt/openclaw/.openclaw/mc-codebase`.
 
 **Auth Flow:**
 - POST `/auth/login` with `{ password }` → backend verifies bcrypt hash → issues JWT as httpOnly cookie
